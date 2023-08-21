@@ -28,8 +28,9 @@ public class DemoApplication {
 		service.addUser(eric);
 		eric.addMembershipYear(2000);
 		System.out.println(service.getListOfAllUsersWithMembershipFromYear(2000));
+	
 
-		// SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }

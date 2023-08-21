@@ -85,4 +85,15 @@ public class User {
         return membershipYears.contains(year);
     }
 
+    public boolean equals(User otherUser){
+        boolean result = false;
+        if(this.name.equals(otherUser.getName())){
+            if(this.age==otherUser.getAge()){
+                if (this.email.equals(otherUser.getEmail())){
+                    result = true;
+                }
+            }
+        }return result;
+    }
+
 }

@@ -10,7 +10,19 @@ public class UserService {
 
     public List<User> userRepository = new ArrayList<>();
 
+    // public User(){
+        
+
+    //     elke.addMembershipYear(2000);
+    // }
+
     public UserService() {
+        User elke = new User("Elke", 44,"str","str");
+        elke.addMembershipYear(2000);
+        userRepository.add(elke);
+        userRepository.add(new User("Elke", 10,"str@str2","str"));
+        userRepository.add(new User("Miyo", 30,"str@str3","str"));
+        userRepository.add(new User("John2", 70,"str@str4","str"));
     }
 
     public List<User> getAllUsers() {
@@ -50,7 +62,8 @@ public class UserService {
             if(user.getEmail().equals(email)){
                 return user;
             }
-        }return null;
+        }
+        return null;
     }
 
     public User removeUser(String email){
@@ -66,6 +79,24 @@ public class UserService {
         List<User> result = new ArrayList<>();
         for(User user: userRepository){
             if(user.hasMembershipFromYear(year)){
+                result.add(user);
+            }
+        }return result;
+    }
+
+    public List<User> getUsersWithAgeAndEmail(int age, String email){
+        List<User> result = new ArrayList<>();
+        for(User user:userRepository){
+            if(user.getAge()==age && user.getEmail().equals(email)){
+                result.add(user);
+            }
+        }return result;
+    }
+
+    public List<User> getUsersBetweenAges(int min,int max){
+        List<User> result = new ArrayList<>();
+        for(User user: userRepository){
+            if(user.getAge()>min&&user.getAge()<max){
                 result.add(user);
             }
         }return result;
