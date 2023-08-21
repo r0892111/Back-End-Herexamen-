@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private List<User> userRepository = new ArrayList<>();
+    public List<User> userRepository = new ArrayList<>();
 
     public UserService() {
     }
@@ -60,5 +60,14 @@ public class UserService {
                 return user;
             }
         }return null;
+    }
+
+    public List getListOfAllUsersWithMembershipFromYear(int year){
+        List<User> result = new ArrayList<>();
+        for(User user: userRepository){
+            if(user.hasMembershipFromYear(year)){
+                result.add(user);
+            }
+        }return result;
     }
 }

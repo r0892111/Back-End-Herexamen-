@@ -81,4 +81,8 @@ public class User {
         return false;
     }
 
+    public boolean hasMembershipFromYear(int year){
+        return membershipYears.contains(year);
+    }
+
 }
