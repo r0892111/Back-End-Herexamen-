@@ -17,7 +17,7 @@ public class UserService {
     // }
 
     public UserService() {
-        User elke = new User("Elke", 44,"str","str");
+        User elke = new User("Elke", 44,"str@str1","str");
         elke.addMembershipYear(2000);
         userRepository.add(elke);
         userRepository.add(new User("Elke", 10,"str@str2","str"));
@@ -75,7 +75,7 @@ public class UserService {
         }return null;
     }
 
-    public List getListOfAllUsersWithMembershipFromYear(int year){
+    public List<User> getListOfAllUsersWithMembershipFromYear(int year){
         List<User> result = new ArrayList<>();
         for(User user: userRepository){
             if(user.hasMembershipFromYear(year)){
