@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import demo.UserService.ServiceException;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,12 +30,12 @@ public class UserRestController {
     }
 
     @GetMapping("/oldest")
-    public User getOldestUser() {
+    public User getOldestUser() throws ServiceException {
         return userService.getOldestUser();
     }
 
     @GetMapping("/search/olderthan")
-    public List<User> searchUsersWithAgeOlderThan(@RequestParam("age") int age) {
+    public List<User> searchUsersWithAgeOlderThan(@RequestParam("age") int age) throws ServiceException {
         return userService.getUsersWithAgeOlderThan(age);
     }
 
@@ -41,11 +44,11 @@ public class UserRestController {
         return userService.getUserWithName(name);
     }
     @GetMapping("/adults")
-    public List<User> getUsersWithAgeOlderThan(){
+    public List<User> getUsersWithAgeOlderThan() throws ServiceException{
         return userService.getUsersWithAgeOlderThan(18);
     }
     @GetMapping("/search/email/{email}")
-    public User searchUserWithEmail(@PathVariable("email")String Email){
+    public User searchUserWithEmail(@PathVariable("email")String Email) throws ServiceException{
         return userService.getUserWithEmail(Email);
     }
 
@@ -64,11 +67,11 @@ public class UserRestController {
     }
 
     @PostMapping()
-    public boolean addUser(@RequestBody User user) {
+    public User addUser(@RequestBody User user) throws ServiceException {
         return userService.addUser(user);
     }
     @DeleteMapping("/{email}")
-    public User deleteUser(@PathVariable("email")String email){
+    public User deleteUser(@PathVariable("email")String email) throws ServiceException{
         return userService.delete(email);
     }
 

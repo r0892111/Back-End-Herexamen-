@@ -32,34 +32,51 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<User> getUsersWithAgeOlderThan(int age) {
+    public List<User> getUsersWithAgeOlderThan(int age) throws ServiceException{
+        if(userRepository.findUsersByAgeAfter(age).isEmpty()){
+            throw new ServiceException("users", "no users with age "+age+ " found");
+        }
+       
+        
         return userRepository.findUsersByAgeAfter(age);
+        
     }
-
+    
    
 
     public User getUserWithName(String name) {
         return userRepository.findUserByName(name);
     }
 
-    public boolean addUser(User user) {
-        if (getUserWithEmail(user.getEmail()) != null)
-            return false;
-        userRepository.save(user);
-        return true;
-    }
-
-    public User getUserWithEmail(String email){
-        User user = userRepository.findUserByEmail(email);
-        if(user == null){
-            return null;
+    public User addUser(User user) throws ServiceException {
+        // Attempt to get the user by email
+        User existingUser = userRepository.findUserByEmail(user.getEmail());
+    
+        // Check if a user with the email already exists
+        if (existingUser != null) {
+            throw new ServiceException("email", "email already taken");
         }
         
-        return userRepository.findUserByEmail(email);
+        // If the email is not taken, save the user
+        userRepository.save(user);
+        return user;
+    }
+    
+
+    public User getUserWithEmail(String email)throws ServiceException{
+        User user = userRepository.findUserByEmail(email);
+        if(user == null){
+            throw new ServiceException("user", "no user found with email: "+email);
+        }
+        
+        return user;
            
     }
 
-    public User removeUser(String email){
+    public User removeUser(String email)throws ServiceException{
+        if(userRepository.findUserByEmail(email)==null){
+            throw new ServiceException("user","user with this email does not exist");
+        }
         userRepository.deleteByEmail(email);
         return userRepository.findUserByEmail(email);
     }
@@ -84,19 +101,31 @@ public class UserService {
     }
    
 
-    public User getOldestUser() {
-        if(userRepository.findAllByOrderByAgeDesc()==null){
-            return null;
+    public User getOldestUser() throws ServiceException{
+        List<User> array = userRepository.findAllByOrderByAgeDesc();
+        if(array==null || array.isEmpty()){
+            throw new ServiceException("users", "no oldest user found");
         }
         return userRepository.findAllByOrderByAgeDesc().get(0);
     }
 
-    public User delete(String email){
+    public User delete(String email)throws ServiceException{
         User var = getUserWithEmail(email);
-        if(var == null){
-            return null;
+        if(var==null){
+            throw new ServiceException(email, email);
         }
         userRepository.delete(var);
         return var;
     }
+
+public class ServiceException extends Exception{
+    private String field;
+    public ServiceException(String field, String message) {
+        super(message);
+        this.field = field;
+    }
+    public String getField(){
+        return field;
+    }
+}
 }

@@ -2,12 +2,21 @@ package demo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.validator.constraints.Length;
+
+import demo.UserService.ServiceException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 
 @Entity
@@ -15,21 +24,32 @@ import jakarta.persistence.Transient;
 
 
 public class User {
-    public User(){};
+
+    
 
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Id
     public long id;
 
     @Transient List<Integer> membershipYears = new ArrayList<Integer>();
+    @NotBlank(message="name may not be empty")
     private String name;
+    @Positive(message="age may not be negative")
     private int age;
+    @NotBlank
+    @Email(message="no valid email")
     private String email;
+    @Pattern(regexp = "^[^\\s]*$", message = "password must be minimum 8 characters and may not contain white spaces")
+    @Length(min=8,message="password must be minimum 8 characters and may not contain white spaces")
+    @Pattern(regexp = ".*\\d.*", message = "password must contain a digit")
+
     private String password;
+
+    public User(){};
     public User(String name, int age,String email, String password) {
+
         this.name = name;
-        if (age >= 0) 
-            this.age = age;
+        this.age = age;
         this.email = email;
         this.password = password;
     }
@@ -59,14 +79,10 @@ public class User {
         return this.name;
     }
     public String getEmail(){
-        if(this.email.contains("@"))
-            return this.email;
-        return null;
+        return this.email;
     }
     public String getPassword(){
-        if(this.password.contains(" "))
-            this.password = "t";
-        return "@$-"+this.password+"&%#";
+        return this.password;
     }
     public int getFirstMembershipYear(){
         if(this.membershipYears.isEmpty())
