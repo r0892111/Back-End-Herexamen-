@@ -2,15 +2,30 @@ package demo;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+
+@Entity
+@Table(name = "users")
+
 
 public class User {
+    public User(){};
 
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Id
+    public long id;
+
+    @Transient List<Integer> membershipYears = new ArrayList<Integer>();
     private String name;
     private int age;
     private String email;
     private String password;
-    private List<Integer> membershipYears = new ArrayList<Integer>();
-
     public User(String name, int age,String email, String password) {
         this.name = name;
         if (age >= 0) 
@@ -18,7 +33,7 @@ public class User {
         this.email = email;
         this.password = password;
     }
-
+    
     public int countMembershipYearsAfter1999 () {
         int result = 0;
         for(Integer year: membershipYears) {
